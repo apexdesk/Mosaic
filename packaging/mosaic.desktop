@@ -1,0 +1,12 @@
+[Desktop Entry]
+Type=Application
+Name=Mosaic
+GenericName=Tablero de referencias
+Comment=Tablero de referencias para artistas: imágenes, vídeos, documentos, audio y modelos 3D
+Exec=mosaic %F
+Icon=mosaic-board
+Terminal=false
+Categories=Graphics;2DGraphics;Viewer;
+MimeType=application/x-mosaic-board;
+StartupWMClass=mosaic
+Keywords=referencias;moodboard;tablero;imagenes;mosaic;refs;

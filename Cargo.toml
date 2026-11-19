@@ -1,0 +1,98 @@
+[package]
+name = "mosaic"
+version = "0.2.0"
+edition = "2024"
+license = "PolyForm-Strict-1.0.0"
+description = "Mosaic: tablero de referencias para artistas, rápido y acelerado por GPU"
+
+[[bin]]
+name = "mosaic"
+path = "src/main.rs"
+
+[features]
+# descargar imágenes arrastradas desde el navegador (ureq con TLS: compila C) y salida de sonido
+# (cpal: en macOS necesita el SDK). Se pueden quitar con --no-default-features, p. ej. para comprobar
+# otras plataformas desde Linux sin sus herramientas de C.
+default = ["web", "audio"]
+web = ["dep:ureq"]
+audio = ["dep:cpal"]
+# arnés de capturas automáticas (REFS_SHOT…), como el de File Browser: sólo para desarrollo
+selftest = []
+
+[dependencies]
+# renderizador propio de PDF y documentos de oficina (el mismo de File Browser)
+apex-view = { path = "vendor/apex-view" }
+eframe = { version = "0.36.2", default-features = false, features = ["glow", "wayland", "x11", "default_fonts"] }
+egui = { version = "0.36.2", default-features = false }
+image = { version = "0.25.10", default-features = false, features = ["png", "jpeg", "gif", "webp", "bmp", "tiff", "ico", "tga"] }
+jpeg-decoder = "0.3.2"
+memmap2 = "0.9"
+serde = { version = "1", features = ["derive"] }
+serde_json = "1"
+arboard = { version = "3", default-features = false, features = ["image-data", "wayland-data-control"] }
+rfd = { version = "0.15", default-features = false, features = ["xdg-portal", "async-std"] }
+# imágenes arrastradas o pegadas desde el navegador (URL http/https)
+ureq = { version = "2", optional = true }
+# referencias de audio (el reproductor nativo de File Browser)
+symphonia = { version = "0.5.4", default-features = false, features = ["mp3", "ogg", "vorbis", "flac", "wav", "aac", "isomp4", "alac", "pcm"] }
+cpal = { version = "0.15.3", optional = true }
+# 3MF (zip) en el visor 3D
+zip = { version = "9.0.1", default-features = false, features = ["deflate"] }
+
+[target.'cfg(unix)'.dependencies]
+libc = "0.2"
+
+# Arrastre hacia otras aplicaciones y recepción en Wayland (módulos de File Browser)
+[target.'cfg(all(unix, not(any(target_os = "macos", target_os = "android"))))'.dependencies]
+raw-window-handle = "0.6"
+wayland-client = "0.31"
+wayland-backend = { version = "0.3", default-features = false, features = ["client_system"] }
+x11rb = { version = "0.13", default-features = false }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+raw-window-handle = "0.6"
+objc2 = "0.5"
+objc2-foundation = { version = "0.2", features = ["all"] }
+objc2-app-kit = { version = "0.2", features = ["all"] }
+
+[target.'cfg(windows)'.dependencies]
+raw-window-handle = "0.6"
+windows-core = "0.62"
+windows = { version = "0.62", features = ["Win32_Foundation", "Win32_System_Com", "Win32_System_Ole", "Win32_System_SystemServices", "Win32_UI_Shell", "Win32_UI_Shell_Common", "Win32_UI_WindowsAndMessaging"] }
+
+[profile.release]
+opt-level = 3
+lto = "fat"
+codegen-units = 1
+panic = "unwind"
+strip = true
+
+# apex-view y sus bibliotecas se compilan por tamaño (según su README): la misma velocidad, menos binario
+[profile.release.package]
+apex-view.opt-level = "z"
+vello_cpu.opt-level = "s"
+vello_common.opt-level = "s"
+fearless_simd.opt-level = "s"
+skrifa.opt-level = "s"
+read-fonts.opt-level = "s"
+font-types.opt-level = "s"
+kurbo.opt-level = "s"
+peniko.opt-level = "s"
+color.opt-level = "s"
+encoding_rs.opt-level = "s"
+zune-jpeg.opt-level = "s"
+zune-core.opt-level = "s"
+
+# los decodificadores van optimizados también en desarrollo: si no, abrir una foto grande tarda segundos
+[profile.dev]
+opt-level = 1
+
+[profile.dev.package."*"]
+opt-level = 3
+
+# egui-winit parcheado (el mismo que File Browser): Ctrl+V llega a la app aunque el portapapeles
+# no tenga texto, para poder pegar imágenes
+[patch.crates-io]
+egui-winit = { path = "vendor/egui-winit" }
+# presupuesto de operadores en glifos CFF (lo necesita apex-view)
+read-fonts = { path = "vendor/apex-view/vendor/read-fonts" }

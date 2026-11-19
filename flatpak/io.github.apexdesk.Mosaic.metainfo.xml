@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<component type="desktop-application">
+  <id>io.github.apexdesk.Mosaic</id>
+  <name>Mosaic</name>
+  <summary>Reference board for artists</summary>
+  <metadata_license>CC0-1.0</metadata_license>
+  <project_license>LicenseRef-proprietary=https://polyformproject.org/licenses/strict/1.0.0/</project_license>
+  <url type="homepage">https://github.com/apexdesk/Mosaic</url>
+  <url type="bugtracker">https://github.com/apexdesk/Mosaic/issues</url>
+  <description>
+    <p>Collect images, videos, PDF and office documents, 3D models, audio, text and sketches on an infinite, GPU-accelerated canvas.</p>
+    <p>Videos need ffmpeg, which is not included in this bundle.</p>
+  </description>
+  <launchable type="desktop-id">io.github.apexdesk.Mosaic.desktop</launchable>
+  <provides><binary>mosaic</binary></provides>
+  <content_rating type="oars-1.1"/>
+  <releases><release version="@VERSION@" date="@DATE@"/></releases>
+</component>

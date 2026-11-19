@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<mime-info xmlns="http://www.freedesktop.org/standards/shared-mime-info">
+  <mime-type type="application/x-mosaic-board">
+    <comment>Tablero de Mosaic</comment>
+    <glob pattern="*.refs"/>
+    <magic priority="60"><match type="string" offset="0" value="REFSENG"/></magic>
+    <icon name="mosaic-board"/>
+  </mime-type>
+</mime-info>

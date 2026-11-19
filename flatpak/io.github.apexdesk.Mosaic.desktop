@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Application
+Name=Mosaic
+GenericName=Reference board
+GenericName[es]=Tablero de referencias
+Comment=Reference board for artists: images, videos, documents, audio and 3D models
+Comment[es]=Tablero de referencias para artistas: imágenes, vídeos, documentos, audio y modelos 3D
+Exec=mosaic %F
+Icon=io.github.apexdesk.Mosaic
+Terminal=false
+Categories=Graphics;2DGraphics;Viewer;
+MimeType=application/x-mosaic-board;
+StartupWMClass=mosaic
+Keywords=references;moodboard;board;images;referencias;tablero;

@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Instalador MSI (WiX v5). Variables: Version, Exe (ruta al .exe), UpgradeCode, Root (raíz del repositorio). -->
+<Wix xmlns="http://wixtoolset.org/schemas/v4/wxs">
+  <Package Name="Mosaic" Manufacturer="apexdesk" Version="$(Version)" UpgradeCode="$(UpgradeCode)" Scope="perMachine" Compressed="yes">
+    <MediaTemplate EmbedCab="yes" />
+    <MajorUpgrade DowngradeErrorMessage="Ya hay instalada una versión más reciente de Mosaic." />
+    <Icon Id="app.ico" SourceFile="$(Root)\assets\icon.ico" />
+    <Property Id="ARPPRODUCTICON" Value="app.ico" />
+    <Property Id="ARPURLINFOABOUT" Value="https://github.com/apexdesk/Mosaic" />
+
+    <StandardDirectory Id="ProgramFiles64Folder">
+      <Directory Id="INSTALLFOLDER" Name="Mosaic">
+        <Component Id="MainExe">
+          <File Id="MosaicExe" Name="mosaic.exe" Source="$(Exe)" KeyPath="yes" />
+          <!-- abrir los tableros .refs con doble clic -->
+          <ProgId Id="Mosaic.Board" Description="Mosaic board" Icon="MosaicExe" IconIndex="0">
+            <Extension Id="refs">
+              <Verb Id="open" TargetFile="MosaicExe" Argument="&quot;%1&quot;" />
+            </Extension>
+          </ProgId>
+        </Component>
+        <Component Id="LicenseFile">
+          <File Id="LicenseTxt" Name="LICENSE.txt" Source="$(Root)\LICENSE" KeyPath="yes" />
+        </Component>
+      </Directory>
+    </StandardDirectory>
+
+    <StandardDirectory Id="ProgramMenuFolder">
+      <Component Id="StartMenuShortcut">
+        <Shortcut Id="AppShortcut" Name="Mosaic" Description="Reference board for artists"
+                  Target="[INSTALLFOLDER]mosaic.exe" WorkingDirectory="INSTALLFOLDER" Icon="app.ico" />
+        <RegistryValue Root="HKCU" Key="Software\apexdesk\Mosaic" Name="StartMenuShortcut" Type="integer" Value="1" KeyPath="yes" />
+      </Component>
+    </StandardDirectory>
+
+    <Feature Id="Main" Title="Mosaic" Level="1">
+      <ComponentRef Id="MainExe" />
+      <ComponentRef Id="LicenseFile" />
+      <ComponentRef Id="StartMenuShortcut" />
+    </Feature>
+  </Package>
+</Wix>
